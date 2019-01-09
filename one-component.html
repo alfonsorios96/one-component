@@ -1,0 +1,86 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="one-component">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h2>Hello [[prop1]]!</h2>
+    </template>
+
+    <script>
+      /**
+       * `one-component`
+       *
+       *
+       * @customElement
+       * @polymer
+       * @demo demo/index.html
+       */
+      class OneComponent extends Polymer.Element {
+        static get is() {
+          return 'one-component';
+        }
+
+        static get properties() {
+          return {
+            prop1: {
+              type: String,
+              value: 'one-component',
+              notify: true,
+              reflectToAttribute: true,
+              observer: '_compute'
+            },
+            user: {
+              type: Object,
+              value: {
+                name: '',
+                lastName: ''
+              }
+            }
+          };
+        }
+
+        static get observers() {
+          return [
+            '_observerFunction(user.name, user.lastName)'
+          ];
+        }
+
+        constructor() {
+          super();
+          console.log('constructor');
+        }
+
+        ready() {
+          super.ready();
+          console.log('ready');
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          console.log('connectedCallback');
+          // this.user.name = 'Alfonso';
+          this.set('user.name', 'Alfonso');
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          console.log('disconnectedCallback');
+        }
+
+        attributeChangedCallback(name, old, value, namespace) {
+          super.attributeChangedCallback(name, old, value, namespace);
+          console.log('attributeChangedCallback');
+        }
+
+        _observerFunction(name, lastName){
+
+        }
+      }
+
+      window.customElements.define(OneComponent.is, OneComponent);
+    </script>
+</dom-module>
