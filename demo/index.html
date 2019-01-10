@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -10,30 +10,33 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../polymer/lib/elements/dom-if.html">
+    <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
     <link rel="import" href="../one-component.html">
 
     <custom-style>
-      <style is="custom-style" include="demo-pages-shared-styles">
-      </style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
     </custom-style>
-  </head>
-  <body>
-    <div class="vertical-section-container centered">
-      <h3>Basic one-component demo</h3>
-      <demo-snippet>
+</head>
+<body>
+<div class="vertical-section-container centered">
+    <h3>Basic one-component demo</h3>
+    <demo-snippet>
         <template>
-          <div id="container"></div>
+            <dom-bind>
+                <template>
+                    <one-component></one-component>
+                </template>
+            </dom-bind>
+            <script>
+                const demo = document.querySelector('dom-bind');
+
+            </script>
         </template>
         <script>
-          const container = document.querySelector('#container');
-          const element = document.createElement('one-component');
-          element.set('prop1', 'Hola');
-          element.addEventListener('prop1-changed', event => {
-            console.log('el evento', event);
-          });
-          container.appendChild(element);
         </script>
-      </demo-snippet>
-    </div>
-  </body>
+    </demo-snippet>
+</div>
+</body>
 </html>

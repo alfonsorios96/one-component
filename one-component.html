@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <dom-module id="one-component">
     <template>
@@ -8,6 +9,8 @@
             }
         </style>
         <h2>Hello [[prop1]]!</h2>
+        <paper-button on-tap="_action">Acción</paper-button>
+
     </template>
 
     <script>
@@ -30,15 +33,7 @@
               type: String,
               value: 'one-component',
               notify: true,
-              reflectToAttribute: true,
-              observer: '_compute'
-            },
-            user: {
-              type: Object,
-              value: {
-                name: '',
-                lastName: ''
-              }
+              reflectToAttribute: true
             }
           };
         }
@@ -76,8 +71,38 @@
           console.log('attributeChangedCallback');
         }
 
-        _observerFunction(name, lastName){
+        api() {
+          return 'datas';
+        }
 
+        _action() {
+          this.dispatchEvent(new CustomEvent('some-event', {
+            bubbles: false,
+            composed: false,
+            detail: 'Hola'
+          }));
+        }
+
+        _executePromise(param) {
+          return new Promise((resolve, reject) => {
+            if (param === 1) {
+              resolve('success');
+            } else {
+              reject({
+                code: 500,
+                message: 'Nos morimos :/'
+              });
+            }
+          });
+        }
+
+        _executeDependency() {
+          const dataProccesed = this.api();
+          return dataProccesed && dataProccesed === 'data';
+        }
+
+        _executeCallback() {
+          this.api();
         }
       }
 

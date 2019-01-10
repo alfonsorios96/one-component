@@ -13,38 +13,54 @@
   </head>
   <body>
 
-    <test-fixture id="BasicTestFixture">
+    <test-fixture id="basic">
       <template>
         <one-component></one-component>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="ChangedPropertyTestFixture">
-      <template>
-        <one-component prop1="new-prop1"></one-component>
       </template>
     </test-fixture>
 
     <script>
       suite('one-component', () => {
 
-        test('instantiating the element with default properties works', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'one-component');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello one-component!');
+        test('Testing events', done => {
+          const element = fixture('basic');
+          element.addEventListener('some-event', event => {
+            assert.strictEqual('Hola', event.detail);
+            done();
+          });
+          const button = element.shadowRoot.querySelector('paper-button');
+          button.click();
         });
 
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        test('Testing promises success', () => {
+          const element = fixture('basic');
+          const promise = element._executePromise(1);
+          return promise.then(response => assert.strictEqual(response, 'success'));
         });
 
+        test('Testing promises fail', () => {
+          const element = fixture('basic');
+          const promise = element._executePromise(2);
+          return promise.catch(error => assert.deepEqual(error, {
+            code: 500,
+            message: 'Nos morimos :/'
+          }));
+        });
+
+        test('Stub example', () => {
+          const element = fixture('basic');
+          element.api = () => 'data';
+          const resultData = element._executeDependency();
+          assert.isTrue(resultData);
+        });
+
+        test('Spy example', () => {
+          const element = fixture('basic');
+          const spy = sinon.spy(element, 'api');
+          element._executeCallback();
+          assert.isTrue(spy.calledOnce);
+          spy.restore();
+        });
       });
     </script>
 
